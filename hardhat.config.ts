@@ -11,6 +11,12 @@ import 'hardhat-spdx-license-identifier';
 import 'solidity-coverage';
 import { HardhatUserConfig } from 'hardhat/types';
 import Dotenv from 'dotenv';
+import './tasks/facet_cut_add';
+import './tasks/facet_cut_remove';
+import './tasks/facet_deploy';
+import './tasks/repair';
+import './tasks/storage_calculate_diff';
+import './tasks/storage_rewrite';
 
 Dotenv.config();
 
