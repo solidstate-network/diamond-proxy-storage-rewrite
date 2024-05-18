@@ -28,6 +28,11 @@ const config: HardhatUserConfig = {
   },
 
   networks: {
+    hardhat: {
+      forking: {
+        url: `${NODE_URL_MAINNET}`,
+      },
+    },
     mainnet: {
       url: NODE_URL_MAINNET,
     },
