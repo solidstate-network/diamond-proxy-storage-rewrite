@@ -9,19 +9,11 @@ import 'hardhat-gas-reporter';
 import 'hardhat-spdx-license-identifier';
 import 'solidity-coverage';
 import { HardhatUserConfig } from 'hardhat/types';
-
 import Dotenv from 'dotenv';
 
 Dotenv.config();
 
-const {
-  API_KEY_ETHERSCAN,
-  NODE_URL_MAINNET,
-  NODE_URL_TESTNET,
-  PKEY_MAINNET,
-  PKEY_TESTNET,
-  REPORT_GAS,
-} = process.env;
+const { API_KEY_ETHERSCAN, NODE_URL_MAINNET, REPORT_GAS } = process.env;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -37,12 +29,6 @@ const config: HardhatUserConfig = {
   networks: {
     mainnet: {
       url: NODE_URL_MAINNET,
-      accounts: [`${PKEY_MAINNET}`],
-    },
-
-    testnet: {
-      url: NODE_URL_TESTNET,
-      accounts: [`${PKEY_TESTNET}`],
     },
   },
 

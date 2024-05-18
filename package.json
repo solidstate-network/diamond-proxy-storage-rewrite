@@ -1,10 +1,9 @@
 {
-  "name": "TODO",
+  "name": "diamond-proxy-storage-rewrite",
   "version": "0.0.0",
   "private": true,
-  "author": "TODO",
-  "license": "TODO",
-  "description": "TODO",
+  "author": "Nick Barry",
+  "license": "MIT",
   "keywords": [
     "hardhat",
     "waffle",

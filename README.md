@@ -1,8 +1,22 @@
-# SolidState Smart Contract Project
+# Diamond Proxy Storage Rewrite Tool
 
-> Note: This repository was generated from a template or is the template itself. To set up a new project, set the missing data marked "TODO" in `package.json` and remove this notice.
+This repository exists to correct the effects a known issue in multiple EIP-2535 Diamond proxy implementations.
 
-This project is built with [SolidState](https://github.com/solidstate-network). See the [solidstate-solidity](https://github.com/solidstate-network/solidstate-solidity) documentation for information about contract integration and testing.
+## Issue
+
+The issue in question manifests when a [zero-selector](https://www.4byte.directory/signatures/?bytes4_signature=0x00000000) is added to a diamond proxy at position `8n + 1`. If it is later removed, the `diamondCut` function treats it as an empty slot rather than a function signature and ignores it, corrupting the storage of the proxy.
+
+## Usage
+
+Follow the Development insructions below to setup the Hardhat environment.
+
+Use the included Hardhat tasks to correct the storage of an affected diamond proxy. It is recommended to use the high-level `repair` task, which itself runs various lower level
+
+```bash
+yarn run hardhat repair TODO
+```
+
+Each of the component tasks can be run individually. See the Hardhat help menu for more information.
 
 ## Development
 
@@ -30,14 +44,11 @@ The Hardhat environment relies on the following environment variables. The `dote
 | ------------------- | ------------------------------------------------------------------------ |
 | `API_KEY_ETHERSCAN` | [Etherscan](https://etherscan.io//) API key for source code verification |
 | `NODE_URL_MAINNET`  | JSON-RPC node URL for `mainnet` network                                  |
-| `NODE_URL_TESTNET`  | JSON-RPC node URL for `testnet` network                                  |
-| `PKEY_TESTNET`      | private key for test/development use on `testnet` network                |
-| `PKEY_MAINNET`      | private key for production use on `mainnet` network                      |
 | `REPORT_GAS`        | if `true`, a gas report will be generated after running tests            |
 
 ### Networks
 
-By default, Hardhat uses the Hardhat Network in-process. Two additional networks, `mainnet` and `testnet` are available, and their behavior is determined by the configuration of environment variables.
+By default, Hardhat uses the Hardhat Network in-process. An additional network, `mainnet`, is available, and its behavior is determined by the configuration of environment variables.
 
 ### Testing
 
