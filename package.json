@@ -26,6 +26,7 @@
     "@solidstate/abi": "^0.0.59",
     "@solidstate/contracts": "^0.0.59",
     "@solidstate/hardhat-accounts": "^1.0.0",
+    "@solidstate/hardhat-txn-dot-xyz": "^0.2.0",
     "@solidstate/spec": "^0.0.59",
     "@typechain/ethers-v6": "^0.5.1",
     "@typechain/hardhat": "^9.1.0",
