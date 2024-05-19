@@ -6,12 +6,6 @@ task(
   'Remove the storage rewrite function from a diamond proxy',
 )
   .addParam('diamond', 'Address of the diamond proxy', undefined, types.string)
-  .addParam(
-    'facet',
-    'Address of the storage rewrite facet',
-    undefined,
-    types.string,
-  )
   .setAction(async (args, hre) => {
     const diamondContract = await hre.ethers.getContractAt(
       IDiamondWritable,
@@ -20,7 +14,7 @@ task(
 
     const facetContract = await hre.ethers.getContractAt(
       'StorageRewrite',
-      args.facet,
+      args.diamond,
     );
 
     const { selector } = facetContract.getFunction(
