@@ -12,6 +12,12 @@ task(
     types.bigint,
   )
   .addParam(
+    'facetsMappingSlot',
+    'EVM storage slot of the mapping where facets are stored (see README)',
+    undefined,
+    types.bigint,
+  )
+  .addParam(
     'selectorCountSlot',
     'EVM storage slot the selector count is stored (see README)',
     undefined,
@@ -56,6 +62,9 @@ task(
     // simulate all diamondCut transactions to determine correct order of selectors in storage
 
     const currentSelectors: string[] = [];
+    const facetsMapping: {
+      [selector: string]: { index: number; target: string };
+    } = {};
 
     for (const { data } of events) {
       const [facetCuts] = hre.ethers.AbiCoder.defaultAbiCoder().decode(
@@ -63,7 +72,7 @@ task(
         data,
       );
 
-      for (const [, action, selectors] of facetCuts) {
+      for (const [target, action, selectors] of facetCuts) {
         if (action === 0n) {
           for (const selector of selectors) {
             const index = currentSelectors.indexOf(selector);
@@ -73,6 +82,11 @@ task(
             }
 
             currentSelectors.push(selector);
+
+            facetsMapping[selector] = {
+              index: currentSelectors.length - 1,
+              target,
+            };
           }
         } else {
           for (const selector of selectors) {
@@ -82,10 +96,16 @@ task(
               throw new Error('invalid DiamondCut');
             }
 
+            if (action === 1n) {
+              facetsMapping[selector] = { index, target };
+            }
+
             if (action === 2n) {
               currentSelectors[index] =
                 currentSelectors[currentSelectors.length - 1];
               currentSelectors.pop();
+
+              delete facetsMapping[selector];
             }
           }
         }
@@ -113,23 +133,40 @@ task(
         return hre.ethers.solidityPacked(types, values);
       });
 
-    // TODO: make sure to check slots that should be empty but might not be
-
-    // calculate storage slot of each selector group
+    // calculate storage slot of each selector group, including those expected to be empty
 
     const slots: { slot: bigint; data: string }[] = packedSelectors.map(
       (data, index) => {
-        // const slot= args.selectorMappingSlot + BigInt(index)
-
         const slot = BigInt(
           hre.ethers.solidityPackedKeccak256(
             ['uint256', 'uint256'],
             [index, args.selectorMappingSlot],
           ),
         );
+
         return { slot, data };
       },
     );
+
+    // calculate storage slot and data for each entry in the facets mapping
+
+    for (const selector in facetsMapping) {
+      const { index, target } = facetsMapping[selector];
+
+      const slot = BigInt(
+        hre.ethers.solidityPackedKeccak256(
+          ['bytes32', 'uint256'],
+          [hre.ethers.zeroPadBytes(selector, 32), args.facetsMappingSlot],
+        ),
+      );
+
+      const data = hre.ethers.solidityPacked(
+        ['address', 'bytes10', 'uint16'],
+        [target, '0x00000000000000000000', index],
+      );
+
+      slots.push({ slot, data });
+    }
 
     // include slot of selector count
 
