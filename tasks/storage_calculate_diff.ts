@@ -146,7 +146,7 @@ task(
 
     // declare array to track expected storage data
 
-    const slots: { slot: bigint; data: string }[] = [];
+    const slots: { note: string; slot: bigint; data: string }[] = [];
 
     // calculate storage slot of each selector group, including those expected to be empty
 
@@ -160,7 +160,9 @@ task(
         ),
       );
 
-      slots.push({ slot, data });
+      const note = `packed selectors index ${i}`;
+
+      slots.push({ note, slot, data });
     }
 
     // calculate storage slot and data for each entry in the facets mapping
@@ -185,12 +187,15 @@ task(
             [target, '0x00000000000000000000', index],
           );
 
-      slots.push({ slot, data });
+      const note = `facets mapping: ${target} / ${index}`;
+
+      slots.push({ note, slot, data });
     }
 
     // include slot of selector count
 
     slots.push({
+      note: 'selector count',
       slot: storageLayoutSlot + args.selectorCountOffset,
       data: hre.ethers.zeroPadValue(
         hre.ethers.toBeHex(currentSelectors.length),
@@ -210,13 +215,19 @@ task(
 
       const data = hre.ethers.ZeroHash;
 
-      slots.push({ slot, data });
+      const note = `packed selectors index ${i}`;
+
+      slots.push({ note, slot, data });
     }
 
     // compare expected values to on-chain values to determine which slots need to be rewritten
 
-    const slotsToUpdate: { slot: bigint; data: string; observed: string }[] =
-      [];
+    const slotsToUpdate: {
+      note: string;
+      slot: bigint;
+      data: string;
+      observed: string;
+    }[] = [];
 
     for (const slot of slots) {
       const observed = await hre.network.provider.send('eth_getStorageAt', [
