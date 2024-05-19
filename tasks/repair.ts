@@ -43,48 +43,73 @@ task(
     types.bigint,
   )
   .setAction(async (args, hre) => {
+    const {
+      deployer,
+      diamond,
+      storageLayoutSeed,
+      selectorMappingOffset,
+      facetsMappingOffset,
+      selectorCountOffset,
+    } = args;
+
     let authorizedSender = args.authorizedSender;
 
     if (!authorizedSender) {
+      console.log(
+        'No authorizedSender specified; attempting to use owner as fallback...',
+      );
+
       try {
         const ownable = await hre.ethers.getContractAt(IERC173, args.diamond);
         authorizedSender = await ownable.owner.staticCall();
+        console.log(
+          `Using diamond owner as authorizedSender: ${authorizedSender}`,
+        );
       } catch (error) {
-        throw new Error('unable to read owner from diamond');
+        console.log(error);
+        throw new Error(
+          'Unable to read owner from diamond.  Must specify authorizedSender.',
+        );
       }
     }
 
+    console.log('Verifying diamond storage...');
+
     const slotsBeforeCut = await hre.run('storage-calculate-diff', {
-      diamond: args.diamond,
-      storageLayoutSeed: args.storageLayoutSeed,
-      selectorMappingOffset: args.selectorMappingOffset,
-      facetsMappingOffset: args.facetsMappingOffset,
-      selectorCountOffset: args.selectorCountOffset,
+      diamond,
+      storageLayoutSeed,
+      selectorMappingOffset,
+      facetsMappingOffset,
+      selectorCountOffset,
     });
 
     if (slotsBeforeCut.length === 0) {
-      console.log('No issues detected, aborting.');
-      return;
+      throw new Error('No storage rewrite needed for specified diamond.');
     }
 
-    const facet = await hre.run('facet-deploy', {
-      deployer: args.deployer,
-      authorizedSender,
-    });
+    console.log('Deploying StorageRewrite facet...');
 
-    await hre.run('facet-cut-add', { diamond: args.diamond, facet });
+    const facet = await hre.run('facet-deploy', { deployer, authorizedSender });
+
+    console.log('Adding StorageRewrite facet to diamond...');
+
+    await hre.run('facet-cut-add', { diamond, facet });
+
+    console.log('Calculating storage rewrites...');
 
     const slots = await hre.run('storage-calculate-diff', {
-      diamond: args.diamond,
-      storageLayoutSeed: args.storageLayoutSeed,
-      selectorMappingOffset: args.selectorMappingOffset,
-      facetsMappingOffset: args.facetsMappingOffset,
-      selectorCountOffset: args.selectorCountOffset,
+      diamond,
+      storageLayoutSeed,
+      selectorMappingOffset,
+      facetsMappingOffset,
+      selectorCountOffset,
     });
 
-    // TODO: fail loudly if selectorMappingSlot is incorrect
+    console.log('Rewriting storage...');
 
     await hre.run('storage-rewrite', { slots });
 
-    await hre.run('facet-cut-remove', { diamond: args.diamond });
+    console.log('Removing StorageRewrite facet from diamond...');
+
+    await hre.run('facet-cut-remove', { diamond });
   });
