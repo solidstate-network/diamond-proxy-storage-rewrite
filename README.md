@@ -67,6 +67,7 @@ The Hardhat environment relies on the following environment variables. The `dote
 | ------------------- | ------------------------------------------------------------------------ |
 | `API_KEY_ETHERSCAN` | [Etherscan](https://etherscan.io//) API key for source code verification |
 | `NODE_URL_MAINNET`  | JSON-RPC node URL for `mainnet` network                                  |
+| `PKEY_MAINNET`      | private key for production use on `mainnet` network                      |
 | `REPORT_GAS`        | if `true`, a gas report will be generated after running tests            |
 
 ### Networks

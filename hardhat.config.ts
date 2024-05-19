@@ -21,7 +21,8 @@ import './tasks/storage_rewrite';
 
 Dotenv.config();
 
-const { API_KEY_ETHERSCAN, NODE_URL_MAINNET, REPORT_GAS } = process.env;
+const { API_KEY_ETHERSCAN, NODE_URL_MAINNET, PKEY_MAINNET, REPORT_GAS } =
+  process.env;
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -42,6 +43,7 @@ const config: HardhatUserConfig = {
     },
     mainnet: {
       url: NODE_URL_MAINNET,
+      accounts: [`${PKEY_MAINNET}`],
     },
   },
 
