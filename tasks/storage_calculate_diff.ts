@@ -68,7 +68,7 @@ task(
           for (const selector of selectors) {
             const index = currentSelectors.indexOf(selector);
 
-            if (index >= 0) {
+            if (index !== -1) {
               throw new Error('invalid DiamondCut');
             }
 
