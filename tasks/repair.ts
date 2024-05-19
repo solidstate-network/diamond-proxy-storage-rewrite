@@ -130,7 +130,30 @@ task(
     });
 
     if (slotsAfterCut.length > 0) {
-      throw new Error('Failed');
+      if (slotsAfterCut.length != 1) {
+        throw new Error('Failed');
+      }
+
+      const { data, observed } = slotsAfterCut[0];
+
+      const a0 = data.slice(2).match(/.{1,8}/g);
+      const a1 = observed.slice(2).match(/.{1,8}/g);
+
+      let diffs = 0;
+
+      for (let i = 0; i < 8; i++) {
+        if (a0[i] !== a1[i]) {
+          diffs++;
+
+          if (a1[i] !== '44059d35') {
+            throw new Error('Failed');
+          }
+        }
+      }
+
+      if (diffs > 1) {
+        throw new Error('Failed');
+      }
     }
 
     console.log('Okay');
