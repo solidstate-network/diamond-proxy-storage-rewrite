@@ -63,7 +63,7 @@ task(
 
     const currentSelectors: string[] = [];
     const facetsMapping: {
-      [selector: string]: { index: number; target: string };
+      [selector: string]: { index: number; target: string; removed: boolean };
     } = {};
 
     for (const { data } of events) {
@@ -86,6 +86,7 @@ task(
             facetsMapping[selector] = {
               index: currentSelectors.length - 1,
               target,
+              removed: false,
             };
           }
         } else {
@@ -97,7 +98,7 @@ task(
             }
 
             if (action === 1n) {
-              facetsMapping[selector] = { index, target };
+              facetsMapping[selector] = { index, target, removed: false };
             }
 
             if (action === 2n) {
@@ -105,7 +106,7 @@ task(
                 currentSelectors[currentSelectors.length - 1];
               currentSelectors.pop();
 
-              delete facetsMapping[selector];
+              facetsMapping[selector].removed = true;
             }
           }
         }
@@ -151,7 +152,7 @@ task(
     // calculate storage slot and data for each entry in the facets mapping
 
     for (const selector in facetsMapping) {
-      const { index, target } = facetsMapping[selector];
+      const { index, target, removed } = facetsMapping[selector];
 
       const slot = BigInt(
         hre.ethers.solidityPackedKeccak256(
@@ -160,10 +161,12 @@ task(
         ),
       );
 
-      const data = hre.ethers.solidityPacked(
-        ['address', 'bytes10', 'uint16'],
-        [target, '0x00000000000000000000', index],
-      );
+      const data = removed
+        ? hre.ethers.ZeroHash
+        : hre.ethers.solidityPacked(
+            ['address', 'bytes10', 'uint16'],
+            [target, '0x00000000000000000000', index],
+          );
 
       slots.push({ slot, data });
     }
