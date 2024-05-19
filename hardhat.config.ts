@@ -1,6 +1,7 @@
 import '@nomicfoundation/hardhat-chai-matchers';
 import '@nomicfoundation/hardhat-ethers';
 import '@nomicfoundation/hardhat-verify';
+import '@solidstate/hardhat-4byte-uploader';
 import '@solidstate/hardhat-accounts';
 import '@solidstate/hardhat-txn-dot-xyz';
 import '@typechain/hardhat';

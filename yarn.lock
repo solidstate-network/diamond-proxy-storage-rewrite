@@ -703,6 +703,13 @@
   resolved "https://registry.yarnpkg.com/@solidstate/contracts/-/contracts-0.0.59.tgz#5456ce13f72ed11afd843a762a318da05c973c42"
   integrity sha512-xD8X1oDZ8UOnEM0JcHfBegL6TcacxQCKwsKOQeBrLs+8Q2iyQXhEviVNMNpHs4qzoNHe0l6ByS+rpq/qsvanKA==
 
+"@solidstate/hardhat-4byte-uploader@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@solidstate/hardhat-4byte-uploader/-/hardhat-4byte-uploader-1.1.0.tgz#de1b9964827c1caeb516f048855c8a4082fd98fc"
+  integrity sha512-OCyBrPqtLoC7/WPlq7c9fosEOKgAT8jqRHCy/fJ8cK1DSQgYymcgC9g619Je9XjaLKPFgamRgt/HuTpTQnAFdQ==
+  dependencies:
+    axios "^0.24.0"
+
 "@solidstate/hardhat-accounts@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@solidstate/hardhat-accounts/-/hardhat-accounts-1.0.0.tgz#c97e6eb7afa564e9fed456a89213562f74c53381"
@@ -1246,6 +1253,13 @@ at-least-node@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
+
+axios@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.24.0.tgz#804e6fa1e4b9c5288501dd9dff56a7a0940d20d6"
+  integrity sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==
+  dependencies:
+    follow-redirects "^1.14.4"
 
 axios@^1.6.7:
   version "1.6.8"
@@ -2282,7 +2296,7 @@ flat@^5.0.2:
   resolved "https://registry.yarnpkg.com/flat/-/flat-5.0.2.tgz#8ca6fe332069ffa9d324c327198c598259ceb241"
   integrity sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==
 
-follow-redirects@^1.12.1, follow-redirects@^1.15.6:
+follow-redirects@^1.12.1, follow-redirects@^1.14.4, follow-redirects@^1.15.6:
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
   integrity sha512-wWN62YITEaOpSK584EZXJafH1AGpO8RVgElfkuXbTOrPX4fIfOyEpW/CsiNd8JdYrAoOvafRTOEnvsO++qCqFA==
