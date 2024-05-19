@@ -107,9 +107,25 @@ task(
 
     console.log('Rewriting storage...');
 
-    await hre.run('storage-rewrite', { slots });
+    await hre.run('storage-rewrite', { diamond, slots });
 
     console.log('Removing StorageRewrite facet from diamond...');
 
     await hre.run('facet-cut-remove', { diamond });
+
+    console.log('Validating rewritten storage...');
+
+    const slotsAfterCut = await hre.run('storage-calculate-diff', {
+      diamond,
+      storageLayoutSeed,
+      selectorMappingOffset,
+      facetsMappingOffset,
+      selectorCountOffset,
+    });
+
+    if (slotsAfterCut.length > 0) {
+      throw new Error('Failed');
+    }
+
+    console.log('Okay');
   });
