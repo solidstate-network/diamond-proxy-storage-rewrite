@@ -21,7 +21,7 @@ task('facet-cut-add', 'Add the storage rewrite function to a diamond proxy')
     );
 
     const { selector } = facetContract.getFunction(
-      'rewrite(tuple(uint256,bytes32)[])',
+      'rewrite((uint256,bytes32)[])',
     ).fragment;
 
     const facetCuts = [

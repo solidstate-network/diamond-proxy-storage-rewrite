@@ -24,7 +24,7 @@ task(
     );
 
     const { selector } = facetContract.getFunction(
-      'rewrite(tuple(uint256,bytes32)[])',
+      'rewrite((uint256,bytes32)[])',
     ).fragment;
 
     const facetCuts = [
