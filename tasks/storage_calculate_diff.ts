@@ -11,6 +11,12 @@ task(
     undefined,
     types.bigint,
   )
+  .addParam(
+    'selectorCountSlot',
+    'EVM storage slot the selector count is stored (see README)',
+    undefined,
+    types.bigint,
+  )
   .setAction(async (args, hre) => {
     const blockNumber = await hre.network.provider.send('eth_blockNumber', []);
 
@@ -124,6 +130,16 @@ task(
         return { slot, data };
       },
     );
+
+    // include slot of selector count
+
+    slots.push({
+      slot: args.selectorCountSlot,
+      data: hre.ethers.zeroPadValue(
+        hre.ethers.toBeHex(currentSelectors.length),
+        32,
+      ),
+    });
 
     // compare expected values to on-chain values to determine which slots need to be rewritten
 
