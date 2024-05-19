@@ -43,6 +43,12 @@ task(
     types.bigint,
   )
   .setAction(async (args, hre) => {
+    // TODO: remove test RPC methods and ownerSigner references
+    await hre.network.provider.send('hardhat_setBalance', [
+      '0x01F2d0BD6Ea5F04547F671157285025708a200E8',
+      '0xffffffffffffffffffffffff',
+    ]);
+
     const {
       deployer,
       diamond,

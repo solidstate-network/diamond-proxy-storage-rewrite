@@ -7,9 +7,14 @@ task(
 )
   .addParam('diamond', 'Address of the diamond proxy', undefined, types.string)
   .setAction(async (args, hre) => {
+    const ownerSigner = await hre.ethers.getImpersonatedSigner(
+      '0x01F2d0BD6Ea5F04547F671157285025708a200E8',
+    );
+
     const diamondContract = await hre.ethers.getContractAt(
       IDiamondWritable,
       args.diamond,
+      ownerSigner,
     );
 
     const facetContract = await hre.ethers.getContractAt(
@@ -29,11 +34,5 @@ task(
       },
     ];
 
-    const tx = await diamondContract.diamondCut.send(
-      facetCuts,
-      hre.ethers.ZeroAddress,
-      '0x',
-    );
-
-    console.log(tx);
+    await diamondContract.diamondCut(facetCuts, hre.ethers.ZeroAddress, '0x');
   });
