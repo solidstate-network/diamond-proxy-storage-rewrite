@@ -94,7 +94,7 @@ task(
 
     // group selectors into buckets of 8, as they would be stored in the EVM
 
-    const packedSelectors = Array.from(currentSelectors.values())
+    const packedSelectors = currentSelectors
       .reduce<string[][]>((acc, el, index) => {
         const slotIndex = Number(BigInt(index) / 8n);
         acc[slotIndex] ??= [];
