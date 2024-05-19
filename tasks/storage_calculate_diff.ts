@@ -181,6 +181,20 @@ task(
       ),
     });
 
+    // check high-index slots that should be empty
+
+    while (slots.length < 32) {
+      const slot = BigInt(
+        hre.ethers.solidityPackedKeccak256(
+          ['uint256', 'uint256'],
+          [slots.length - 1, args.selectorMappingSlot],
+        ),
+      );
+
+      const data = hre.ethers.ZeroHash;
+      slots.push({ slot, data });
+    }
+
     // compare expected values to on-chain values to determine which slots need to be rewritten
 
     const slotsToUpdate: { slot: bigint; data: string }[] = [];
