@@ -205,11 +205,11 @@ task(
 
     // check high-index slots that should be empty
 
-    while (slots.length < 32) {
+    for (let i = packedSelectors.length; i < 32; i++) {
       const slot = BigInt(
         hre.ethers.solidityPackedKeccak256(
           ['uint256', 'uint256'],
-          [slots.length - 1, storageLayoutSlot + args.selectorMappingOffset],
+          [i, storageLayoutSlot + args.selectorMappingOffset],
         ),
       );
 
