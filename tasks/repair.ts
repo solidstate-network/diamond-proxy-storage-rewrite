@@ -5,12 +5,6 @@ task(
   'repair',
   'Deploy the storage rewrite facet, connect it to a diamond, fix the storage, and remove the facet',
 )
-  .addOptionalParam(
-    'deployer',
-    'The account used to deploy the storage rewrite facet (defaults to first account loaded into Hardhat environment)',
-    undefined,
-    types.string,
-  )
   .addParam('diamond', 'Address of the diamond proxy', undefined, types.string)
   .addOptionalParam(
     'authorizedSender',
@@ -50,7 +44,6 @@ task(
     ]);
 
     const {
-      deployer,
       diamond,
       storageLayoutSeed,
       selectorMappingOffset,
@@ -95,7 +88,7 @@ task(
 
     console.log('Deploying StorageRewrite facet...');
 
-    const facet = await hre.run('facet-deploy', { deployer, authorizedSender });
+    const facet = await hre.run('facet-deploy', { authorizedSender });
 
     console.log('Adding StorageRewrite facet to diamond...');
 

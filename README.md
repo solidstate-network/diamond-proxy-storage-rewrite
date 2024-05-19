@@ -26,7 +26,6 @@ The following is a description of each of the arguments accepted by the tasks.
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `diamond`               | Address of the diamond proxy with corrupted storage.                                                                                                      |
 | `proxy`                 | Address of the `StorageRewrite` contract.                                                                                                                 |
-| `deployer`              | Address of the account used to deploy the `StorageRewrite` contract.                                                                                      |
 | `authorizedSender`      | Address of the account permitted to call the `rewrite` function on the `StorageRewrite` contract. Defaults to the EIP-173 `owner` of the `diamond` proxy. |
 | `storageLayoutSeed`     | String seed used to calculate slot of storage layout struct, where `slot = keccak256(seed)`                                                               |
 | `selectorMappingOffset` | Index within the storage struct where the `diamond` proxy's "selectorSlots" `mapping` is located.                                                         |
