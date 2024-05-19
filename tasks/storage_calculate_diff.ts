@@ -190,11 +190,6 @@ task(
       ]);
 
       if (observed !== slot.data) {
-        // TODO: too many slots don't match
-        console.log('>');
-        console.log(observed);
-        console.log(slot.data);
-
         slotsToUpdate.push(slot);
       }
     }
