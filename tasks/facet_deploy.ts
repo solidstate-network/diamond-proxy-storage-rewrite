@@ -22,11 +22,9 @@ task('facet-deploy', 'Deploy the storage rewrite facet')
       [deployerSigner] = await hre.ethers.getSigners();
     }
 
-    let { authorizedSender } = args;
-
     const facetContract = await hre.ethers.deployContract(
       'StorageRewrite',
-      [authorizedSender.address],
+      [args.authorizedSender],
       deployerSigner,
     );
 
