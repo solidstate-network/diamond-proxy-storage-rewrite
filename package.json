@@ -16,7 +16,7 @@
     "wow"
   ],
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "prettier": "prettier --write --plugin=prettier-plugin-solidity ."
   },
   "devDependencies": {
