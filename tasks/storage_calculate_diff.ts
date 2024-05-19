@@ -37,7 +37,14 @@ task(
         (BigInt((a as any).blockNumber) << 256n) + BigInt((a as any).logIndex);
       const bIndex =
         (BigInt((b as any).blockNumber) << 256n) + BigInt((b as any).logIndex);
-      return Number(aIndex - bIndex);
+
+      if (aIndex > bIndex) {
+        return 1;
+      } else if (bIndex > aIndex) {
+        return -1;
+      } else {
+        return 0;
+      }
     });
 
     // simulate all diamondCut transactions to determine correct order of selectors in storage
