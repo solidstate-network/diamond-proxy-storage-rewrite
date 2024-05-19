@@ -36,13 +36,15 @@ task(
       }
     }
 
-    const slots = await hre.run('storage-calculate-diff', {
+    const slotsBeforeCut = await hre.run('storage-calculate-diff', {
       diamond: args.diamond,
       selectorMappingSlot: args.selectorMappingSlot,
     });
 
-    // TODO: return if no slots
-    // TODO: fail loudly if selectorMappingSlot is incorrect
+    if (slotsBeforeCut.length === 0) {
+      console.log('No issues detected, aborting.');
+      return;
+    }
 
     const facet = await hre.run('facet-deploy', {
       deployer: args.deployer,
@@ -50,6 +52,13 @@ task(
     });
 
     await hre.run('facet-cut-add', { diamond: args.diamond, facet });
+
+    const slots = await hre.run('storage-calculate-diff', {
+      diamond: args.diamond,
+      selectorMappingSlot: args.selectorMappingSlot,
+    });
+
+    // TODO: fail loudly if selectorMappingSlot is incorrect
 
     await hre.run('storage-rewrite', { slots });
 
