@@ -215,7 +215,8 @@ task(
 
     // compare expected values to on-chain values to determine which slots need to be rewritten
 
-    const slotsToUpdate: { slot: bigint; data: string }[] = [];
+    const slotsToUpdate: { slot: bigint; data: string; observed: string }[] =
+      [];
 
     for (const slot of slots) {
       const observed = await hre.network.provider.send('eth_getStorageAt', [
@@ -225,7 +226,7 @@ task(
       ]);
 
       if (observed !== slot.data) {
-        slotsToUpdate.push(slot);
+        slotsToUpdate.push({ ...slot, observed });
       }
     }
 
