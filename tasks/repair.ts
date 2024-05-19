@@ -19,8 +19,26 @@ task(
     types.string,
   )
   .addParam(
-    'selectorMappingSlot',
-    'EVM storage slot of the mapping where selectors are stored (see README)',
+    'storageLayoutSeed',
+    'Seed string used to calculate storage layout struct location (see README',
+    undefined,
+    types.string,
+  )
+  .addParam(
+    'selectorMappingOffset',
+    'Index within storage layout of the mapping where selectors are stored (see README)',
+    undefined,
+    types.bigint,
+  )
+  .addParam(
+    'facetsMappingOffset',
+    'Index within storage layout of the mapping where facets are stored (see README)',
+    undefined,
+    types.bigint,
+  )
+  .addParam(
+    'selectorCountOffset',
+    'Index within storage layout where the selector count is stored (see README)',
     undefined,
     types.bigint,
   )
@@ -38,7 +56,10 @@ task(
 
     const slotsBeforeCut = await hre.run('storage-calculate-diff', {
       diamond: args.diamond,
-      selectorMappingSlot: args.selectorMappingSlot,
+      storageLayoutSeed: args.storageLayoutSeed,
+      selectorMappingOffset: args.selectorMappingOffset,
+      facetsMappingOffset: args.facetsMappingOffset,
+      selectorCountOffset: args.selectorCountOffset,
     });
 
     if (slotsBeforeCut.length === 0) {
@@ -55,7 +76,10 @@ task(
 
     const slots = await hre.run('storage-calculate-diff', {
       diamond: args.diamond,
-      selectorMappingSlot: args.selectorMappingSlot,
+      storageLayoutSeed: args.storageLayoutSeed,
+      selectorMappingOffset: args.selectorMappingOffset,
+      facetsMappingOffset: args.facetsMappingOffset,
+      selectorCountOffset: args.selectorCountOffset,
     });
 
     // TODO: fail loudly if selectorMappingSlot is incorrect
