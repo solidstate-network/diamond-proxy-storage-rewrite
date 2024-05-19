@@ -144,20 +144,24 @@ task(
         return hre.ethers.solidityPacked(types, values);
       });
 
+    // declare array to track expected storage data
+
+    const slots: { slot: bigint; data: string }[] = [];
+
     // calculate storage slot of each selector group, including those expected to be empty
 
-    const slots: { slot: bigint; data: string }[] = packedSelectors.map(
-      (data, index) => {
-        const slot = BigInt(
-          hre.ethers.solidityPackedKeccak256(
-            ['uint256', 'uint256'],
-            [index, storageLayoutSlot + args.selectorMappingOffset],
-          ),
-        );
+    for (let i = 0; i < packedSelectors.length; i++) {
+      const data = packedSelectors[i];
 
-        return { slot, data };
-      },
-    );
+      const slot = BigInt(
+        hre.ethers.solidityPackedKeccak256(
+          ['uint256', 'uint256'],
+          [i, storageLayoutSlot + args.selectorMappingOffset],
+        ),
+      );
+
+      slots.push({ slot, data });
+    }
 
     // calculate storage slot and data for each entry in the facets mapping
 
@@ -205,6 +209,7 @@ task(
       );
 
       const data = hre.ethers.ZeroHash;
+
       slots.push({ slot, data });
     }
 
