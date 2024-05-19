@@ -16,14 +16,14 @@ task('storage-rewrite', 'Write the needed changes to storage')
 
     await facetContract.rewrite(args.slots);
 
-    const chainId = parseInt(
-      await hre.network.provider.send('eth_chainId', []),
-    );
+    // const chainId = parseInt(
+    //   await hre.network.provider.send('eth_chainId', []),
+    // );
 
-    await hre.run('txn-dot-xyz-send', {
-      chainId,
-      contractAddress: args.diamond,
-      fn: 'rewrite',
-      fnParams: args.slots,
-    });
+    // await hre.run('txn-dot-xyz-send', {
+    //   chainId,
+    //   contractAddress: args.diamond,
+    //   fn: 'rewrite',
+    //   fnParams: args.slots,
+    // });
   });
