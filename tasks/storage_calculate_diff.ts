@@ -6,25 +6,35 @@ task(
 )
   .addParam('diamond', 'Address of the diamond proxy', undefined, types.string)
   .addParam(
-    'selectorMappingSlot',
-    'EVM storage slot of the mapping where selectors are stored (see README)',
+    'storageLayoutSeed',
+    'Seed string used to calculate storage layout struct location (see README',
+    undefined,
+    types.string,
+  )
+  .addParam(
+    'selectorMappingOffset',
+    'Index within storage layout of the mapping where selectors are stored (see README)',
     undefined,
     types.bigint,
   )
   .addParam(
-    'facetsMappingSlot',
-    'EVM storage slot of the mapping where facets are stored (see README)',
+    'facetsMappingOffset',
+    'Index within storage layout of the mapping where facets are stored (see README)',
     undefined,
     types.bigint,
   )
   .addParam(
-    'selectorCountSlot',
-    'EVM storage slot the selector count is stored (see README)',
+    'selectorCountOffset',
+    'Index within storage layout where the selector count is stored (see README)',
     undefined,
     types.bigint,
   )
   .setAction(async (args, hre) => {
     const blockNumber = await hre.network.provider.send('eth_blockNumber', []);
+
+    const storageLayoutSlot = BigInt(
+      hre.ethers.solidityPackedKeccak256(['string'], [args.storageLayoutSeed]),
+    );
 
     // query all DiamondCut events emitted from diamond
 
@@ -141,7 +151,7 @@ task(
         const slot = BigInt(
           hre.ethers.solidityPackedKeccak256(
             ['uint256', 'uint256'],
-            [index, args.selectorMappingSlot],
+            [index, storageLayoutSlot + args.selectorMappingOffset],
           ),
         );
 
@@ -157,7 +167,10 @@ task(
       const slot = BigInt(
         hre.ethers.solidityPackedKeccak256(
           ['bytes32', 'uint256'],
-          [hre.ethers.zeroPadBytes(selector, 32), args.facetsMappingSlot],
+          [
+            hre.ethers.zeroPadBytes(selector, 32),
+            storageLayoutSlot + args.facetsMappingOffset,
+          ],
         ),
       );
 
@@ -174,7 +187,7 @@ task(
     // include slot of selector count
 
     slots.push({
-      slot: args.selectorCountSlot,
+      slot: storageLayoutSlot + args.selectorCountOffset,
       data: hre.ethers.zeroPadValue(
         hre.ethers.toBeHex(currentSelectors.length),
         32,
@@ -187,7 +200,7 @@ task(
       const slot = BigInt(
         hre.ethers.solidityPackedKeccak256(
           ['uint256', 'uint256'],
-          [slots.length - 1, args.selectorMappingSlot],
+          [slots.length - 1, storageLayoutSlot + args.selectorMappingOffset],
         ),
       );
 
