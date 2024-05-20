@@ -72,6 +72,8 @@ task(
       }
     }
 
+    await hre.run('compile');
+
     console.log('Verifying diamond storage...');
 
     const slotsBeforeCut = await hre.run('storage-calculate-diff', {
